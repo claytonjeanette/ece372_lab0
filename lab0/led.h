@@ -1,6 +1,6 @@
 /* 
  * File:   led.h
- * Author: gvanhoy
+ * Author: jeanette
  *
  * Created on August 27, 2015, 3:15 PM
  */
