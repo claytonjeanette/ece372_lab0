@@ -61,7 +61,7 @@ int main() {
                 break;
                 
             case wait:
-                if (IFS0bits.T2IF == 1){ //(PORTDbits.RD6 == 0){ // timer 2 seconds hits
+                if (IFS0bits.T2IF == 1){ //(PORTDbits.RD6 == 0) timer 2 seconds hits
                   state = wait2;
                 }
                 else {
@@ -72,26 +72,42 @@ int main() {
                 break;
                 
             case wait2:
-                if (IFS1bits.CNDIF == 0) {
+                if (IFS1bits.CNDIF == 0) {  // wait until button is released
                     state = debounceRelease2;
                 }
-                // wait until button is released
                 // Then go to debounceRelease2 that will go to correct state
-                state = wait2;
                 break;
                 
             case debouncePress:
-                // delays a few ms
-                // go to the first wait state
+                if (T2CONbits.ON == 0){// delays a few ms
+                    state = wait;
+                }// go to the first wait state
                 break;
                 
             case debounceRelease:
-                // delays a few ms
+                if (T2CONbits.ON == 0 && LATDbits.LATD0 == 1 ){// delays a few ms
+                    state = led2;
+                }
+                else if (T2CONbits.ON == 0 && LATDbits.LATD1 == 1 ){// delays a few ms
+                    state = led3;
+                }
+                else if (T2CONbits.ON == 0 && LATDbits.LATD2 == 1 ){// delays a few ms
+                    state = led1;
+                }
                 // the release case for under 2 seconds to go forward
                 break;
                 
             case debounceRelease2:
-                // delay a few ms
+                
+                if (T2CONbits.ON == 0 && LATDbits.LATD0 == 1 ){// delays a few ms
+                    state = led1;
+                }
+                else if (T2CONbits.ON == 0 && LATDbits.LATD1 == 1 ){// delays a few ms
+                    state = led2;
+                }
+                else if (T2CONbits.ON == 0 && LATDbits.LATD2 == 1 ){// delays a few ms
+                    state = led3;
+                }
                 // the release case for over 2 seconds to go backwards
                 break;
                 
