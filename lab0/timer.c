@@ -14,9 +14,6 @@ void initTimer1(){
     PR1 = 1221*4;// Initialize PR1 for a 1 sec timer
     T1CONbits.TCKPS = 3; // Initialize pre-scalar
     T1CONbits.TCS = 0; // Setting the oscillator for Timer 1
-    //IEC0bits.T1IE = 1;// Enable the interrupt
-   // IFS0bits.T1IF = 0;// Put the flag down
-   // IPC1bits.T1IP = 3;// Configure the Interrupt Priority
     T1CONbits.TON = 1;// Turn the timer on
 }
 
@@ -26,9 +23,6 @@ initTimer2(){
    // Initialize Priority Register 1 for a 2 sec timer
     T2CONbits.TCKPS = 0; // Initialize pre-scalar
     T2CONbits.TCS = 0; // Setting the oscillator for Timer 2
-   // IEC0bits.T2IE = 1;// Enable the interrupt for Timer 2
-   // IFS0bits.T2IF = 0;// Put the flag down
-   // IPC2bits.T2IP = 3;// Configure the Interrupt Priority
     T2CONbits.TON = 1;// Turn the timer on
     
 }

@@ -124,12 +124,11 @@ section                    address  length [bytes]      (dec)  Description
 .text._bootstrap_except 0x9d0007cc           0x48          72   
 .text._general_exceptio 0x9d000814           0x48          72   
 .vector_default         0x9d00085c           0x48          72   
-.text                   0x9d0008a4           0x44          68  App's exec code 
-.dinit                  0x9d0008e8           0x20          32   
-.text                   0x9d000908           0x18          24  App's exec code 
-.text._on_reset         0x9d000920            0x8           8   
-.text._on_bootstrap     0x9d000928            0x8           8   
-      Total kseg0_program_mem used  :       0x930        2352  0.4% of 0x80000
+.text                   0x9d0008a4           0x5c          92  App's exec code 
+.dinit                  0x9d000900           0x10          16   
+.text._on_reset         0x9d000910            0x8           8   
+.text._on_bootstrap     0x9d000918            0x8           8   
+      Total kseg0_program_mem used  :       0x920        2336  0.4% of 0x80000
 
 kseg0 Boot-Memory Usage
 section                    address  length [bytes]      (dec)  Description
@@ -195,14 +194,14 @@ section                    address  length [bytes]      (dec)  Description
 .bev_excpt              0xbfc00380           0x10          16  BEV-Exception 
          Total kseg1_boot_mem used  :       0x204         516  44.2% of 0x490
         --------------------------------------------------------------------------
-         Total Program Memory used  :       0xcb4        3252  0.6% of 0x81e00
+         Total Program Memory used  :       0xca4        3236  0.6% of 0x81e00
         --------------------------------------------------------------------------
 
 
 kseg1 Data-Memory Usage
 section                    address  length [bytes]      (dec)  Description
 -------                 ----------  -------------------------  -----------
-.sdata                  0xa0000000            0x4           4  Small init data 
+.sbss                   0xa0000000            0x4           4  Small uninit data 
          Total kseg1_data_mem used  :         0x4           4  0.0% of 0x20000
         --------------------------------------------------------------------------
             Total Data Memory used  :         0x4           4  0.0% of 0x20000
@@ -843,27 +842,27 @@ END GROUP
  *(.got)
                 0xa0000000                . = ALIGN (0x4)
 
-.sdata          0xa0000000        0x4
+.sdata          0xa0000000        0x0
                 0xa0000000                _sdata_begin = .
  *(.sdata .sdata.* .gnu.linkonce.s.*)
- .sdata         0xa0000000        0x4 build/default/production/main.o
-                0xa0000000                state
-                0xa0000004                . = ALIGN (0x4)
-                0xa0000004                _sdata_end = .
+                0xa0000000                . = ALIGN (0x4)
+                0xa0000000                _sdata_end = .
 
 .lit8
  *(.lit8)
 
 .lit4
  *(.lit4)
-                0xa0000004                . = ALIGN (0x4)
-                0xa0000004                _data_end = .
-                0xa0000004                _bss_begin = .
+                0xa0000000                . = ALIGN (0x4)
+                0xa0000000                _data_end = .
+                0xa0000000                _bss_begin = .
 
-.sbss           0xa0000004        0x0
-                0xa0000004                _sbss_begin = .
+.sbss           0xa0000000        0x4
+                0xa0000000                _sbss_begin = .
  *(.dynsbss)
  *(.sbss .sbss.* .gnu.linkonce.sb.*)
+ .sbss          0xa0000000        0x4 build/default/production/main.o
+                0xa0000000                state
  *(.scommon)
                 0xa0000004                _sbss_end = .
                 0xa0000004                . = ALIGN (0x4)
@@ -1572,28 +1571,26 @@ LOAD data_init
                 0x9d00085c       0x48 c:/program files (x86)/microchip/xc32/v1.40/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(defaultinterrupt.o)
                 0x9d00085c                _DefaultInterrupt
 
-.text           0x9d0008a4       0x44
+.text           0x9d0008a4       0x5c
  .text          0x9d0008a4       0x44 c:/program files (x86)/microchip/xc32/v1.40/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\pic32_software_reset.o
                 0x9d0008a4                __pic32_software_reset
+ .text          0x9d0008e8       0x18 c:/program files (x86)/microchip/xc32/v1.40/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(default-nmi-handler.o)
+                0x9d0008e8                _nmi_handler
 
-.dinit          0x9d0008e8       0x20
- .dinit         0x9d0008e8       0x20 data_init
-
-.text           0x9d000908       0x18
- .text          0x9d000908       0x18 c:/program files (x86)/microchip/xc32/v1.40/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(default-nmi-handler.o)
-                0x9d000908                _nmi_handler
+.dinit          0x9d000900       0x10
+ .dinit         0x9d000900       0x10 data_init
 
 .text._on_reset
-                0x9d000920        0x8
+                0x9d000910        0x8
  .text._on_reset
-                0x9d000920        0x8 c:/program files (x86)/microchip/xc32/v1.40/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(default-on-reset.o)
-                0x9d000920                _on_reset
+                0x9d000910        0x8 c:/program files (x86)/microchip/xc32/v1.40/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(default-on-reset.o)
+                0x9d000910                _on_reset
 
 .text._on_bootstrap
-                0x9d000928        0x8
+                0x9d000918        0x8
  .text._on_bootstrap
-                0x9d000928        0x8 c:/program files (x86)/microchip/xc32/v1.40/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(default-on-bootstrap.o)
-                0x9d000928                _on_bootstrap
+                0x9d000918        0x8 c:/program files (x86)/microchip/xc32/v1.40/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(default-on-bootstrap.o)
+                0x9d000918                _on_bootstrap
 
 .text           0x00000000        0x0
  .text          0x00000000        0x0 c:/program files (x86)/microchip/xc32/v1.40/bin/bin/../../lib/gcc/pic32mx/4.8.3/../../../../pic32mx/lib\libpic32.a(defaultinterrupt.o)
