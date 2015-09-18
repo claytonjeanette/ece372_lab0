@@ -22,7 +22,7 @@ typedef enum stateTypeEnum{
 } stateType;
 
 //TODO: Use volatile variables that change within interrupts
-volatile stateType state = led1;
+volatile stateType state = led2;
 
 
 
@@ -44,56 +44,62 @@ int main() {
         switch(state){
             case led1:
                 turnOnLED(1); // turns on led1
-                if (IFS1bits.CNDIF == 1); // if the switch is pressed
-                  state = debouncePress;
+                if (IFS1bits.CNDIF == 1){ // IFS1bits.CNDIF == 1)if the switch is pressed
+                          state = debouncePress;              
+                }
                 break;
                 
             case led2:
                 turnOnLED(2); // turns on led2
-                if (IFS1bits.CNDIF == 1); // if the switch is pressed
+                if (IFS1bits.CNDIF == 1){ // if the switch is pressed
                   state = debouncePress;
+                }
                 break;
                 
             case led3:
                 turnOnLED(3); // turns on led3
-                if (IFS1bits.CNDIF == 1); // if the switch is pressed
+                if (IFS1bits.CNDIF == 1){ // if the switch is pressed
                   state = debouncePress;
+                }
                 break;
                 
             case wait:
-                if (IFS0bits.T2IF == 1){ //(PORTDbits.RD6 == 0) timer 2 seconds hits
-                  state = wait2;
-                }
-                else {
-                    state = debounceRelease;
-                }
-                // after two seconds occurs goes to wait 2
-                // if button is released before 2 sec go to correct state
+                if (PORTDbits.RD6 == 1){
+                    if(IFS0bits.T2IF == 1){ // after two seconds occurs goes to wait 2
+                        state = wait2; 
+                    }
+                    if (IFS1bits.CNDIF == 1){ // if button is released before 2 sec go to correct state
+                        state = debounceRelease; 
+                    }  
+                } 
                 break;
                 
             case wait2:
+                state=led3;
                 if (IFS1bits.CNDIF == 0) {  // wait until button is released
-                    state = debounceRelease2;
+                   // state = debounceRelease2;
                 }
                 // Then go to debounceRelease2 that will go to correct state
                 break;
                 
             case debouncePress:
-                if (T2CONbits.ON == 0){// delays a few ms
-                    state = wait;
-                }// go to the first wait state
+                if (T2CONbits.ON == 1){// waits for delays a few ms
+                    state = wait;// go to the first wait state
+                }
                 break;
                 
             case debounceRelease:
-                if (T2CONbits.ON == 0 && LATDbits.LATD0 == 1 ){// delays a few ms
-                    state = led2;
-                }
-                else if (T2CONbits.ON == 0 && LATDbits.LATD1 == 1 ){// delays a few ms
-                    state = led3;
-                }
-                else if (T2CONbits.ON == 0 && LATDbits.LATD2 == 1 ){// delays a few ms
-                    state = led1;
-                }
+               if (T2CONbits.ON == 1){ // waits for delay
+                 if ( LATDbits.LATD0 == 1 ){//if on led1
+                     state = led2;
+                  }
+                 else if ( LATDbits.LATD1 == 1 ){// if on led2
+                     state = led3;
+                 }
+                 else if (LATDbits.LATD2 == 1 ){// if on led3
+                      state = led1;
+                 }
+               }
                 // the release case for under 2 seconds to go forward
                 break;
                 
